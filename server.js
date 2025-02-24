@@ -50,8 +50,14 @@ async function initial() {
 }
 
 require("./app/routes/auth.routes")(app);
+require("./app/routes/user.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+
+const swaggerUIPath= require("swagger-ui-express");
+const swaggerjsonFilePath = require("./swagger.json");
+app.use("/swagger", swaggerUIPath.serve, swaggerUIPath.setup(swaggerjsonFilePath));
