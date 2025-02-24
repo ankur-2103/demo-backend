@@ -1,10 +1,14 @@
 const express = require("express");
 const cors = require("cors");
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    allowedHeaders: ["x-access-token", "Origin", "Content-Type", "Accept"],
+  })
+);
 
 app.use(express.json());
 
@@ -15,7 +19,7 @@ const Role = db.role;
 
 db.mongoose
   .connect(
-    `mongodb+srv://ankurvasta123:${process.env.PASSWORD}@cluster0.1f6xg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
+    `mongodb+srv://ankurvasta123:${process.env.PASSWORD}@cluster0.1f6xg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
   )
   .then(() => {
     console.log("Successfully connect to MongoDB.");
@@ -44,3 +48,10 @@ async function initial() {
     console.error("Error initializing roles:", err);
   }
 }
+
+require("./app/routes/auth.routes")(app);
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
